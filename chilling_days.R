@@ -3,6 +3,9 @@ library(ncdf4)
 library(lubridate)
 
 
+#data from 
+#https://climexp.knmi.nl/selectdailyseries.cgi?id=someone@somewhere
+
   ## chilling days
 feldberg <- read.table("data/vgdcnGME00120934.dat")
 st_bernard <- read.table("data/vgdcnSZ000006717.dat") 

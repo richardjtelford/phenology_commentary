@@ -50,6 +50,6 @@ Larix_deciduaNO %>%
     mutate(species = "Larix_decidua")
   bind_rows(BetulaNO, Fagus_sylvaticaNO, PiceaNO) %>% 
     inner_join(stationNO, by = "PEP_ID") %>% 
-    #group_by(species, YEAR) %>% 
-    summarise(mean = mean(DAY))
+    group_by(species, YEAR) %>% 
+    summarise(mean = mean(DAY)) %>% print(n = Inf)
   

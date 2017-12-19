@@ -48,7 +48,7 @@ climate2 <- climate %>%
 # Mean leaf-out date
 box <- data_frame(station = c("lugano", "feldberg", "bergen", "nesbyen", "tromso", "utsjoki"),
   xmin = rep(-Inf, 6),
-xmax = c(ymd("2016-04-23"), ymd("2016-05-11"), ymd("2016-05-15"), ymd("2016-05-15"), ymd("2016-05-15"), ymd("2016-05-15")),
+xmax = c(ymd("2016-04-23"), ymd("2016-05-11"), ymd("2016-05-15"), ymd("2016-05-15"), ymd("2016-06-21"), ymd("2016-06-21")),
 ymin = rep(0, 6),
 ymax = rep(8, 6))
 

@@ -50,29 +50,31 @@ climate2 <- climate %>%
   mutate(decade = floor(year/10) * 10, decade = factor(decade))#, levels = c(2000, 1960)))
 
 # Mean leaf-out date
-box <- data_frame(station = c("lugano", "feldberg", "bergen", "nesbyen", "tromso", "utsjoki"),
-  xmin = rep(-Inf, 6),
+box <- data_frame(station = c("a) Lugano (CH) 46.0°N 9.0°E 276m", "b) Feldberg (DE) 47.9°N 8.0°E 1490m", "c) Bergen (NO) 60.4°N 5.3°E 12m", "d) Nesbyen (NO) 60.6°N 9.1°E 167m", "e) Tromso (NO) 69.7°N 18.9°E 100m", "f) Utsjoki (SF) 69.8°N 27.0°E 107m"),
+  xmin = rep(ymd("2015-11-01"), 6),
 xmax = c(ymd("2016-04-23"), ymd("2016-05-11"), ymd("2016-05-15"), ymd("2016-05-15"), ymd("2016-06-21"), ymd("2016-06-21")),
 ymin = 0,
 ymax = 8)
 
-climate2 %>%
+climateplot <- climate2 %>%
   mutate(station = factor(station, levels = c("lugano", "feldberg", "bergen", "nesbyen", "tromso", "utsjoki"))) %>% 
-  mutate(station = plyr::mapvalues(station, c("lugano", "feldberg", "bergen", "nesbyen", "tromso", "utsjoki"), c("a) Lugano (CH) 46.0°N 9.0°E 276.0m", "b) Feldberg (DE) 47.9°N 8.0°E 1490.0m", "c) Bergen (NO) 60.4°N 5.3°E 12.0m", "d) Nesbyen (NO) 60.6°N 9.1°E 167.0m", "e) Tromso (NO) 69.7°N 18.9°E 100.0m", "f) Utsjoki (SF) 69.8°N 27.0°E 107.0m"))) %>% 
+  mutate(station = plyr::mapvalues(station, c("lugano", "feldberg", "bergen", "nesbyen", "tromso", "utsjoki"), c("a) Lugano (CH) 46.0°N 9.0°E 276m", "b) Feldberg (DE) 47.9°N 8.0°E 1490m", "c) Bergen (NO) 60.4°N 5.3°E 12m", "d) Nesbyen (NO) 60.6°N 9.1°E 167m", "e) Tromso (NO) 69.7°N 18.9°E 100m", "f) Utsjoki (SF) 69.8°N 27.0°E 107m"))) %>% 
   mutate(decade = plyr::mapvalues(decade, c("1960", "2000"), c("1960-1969", "2000-2009"))) %>% 
   ggplot(aes(x = date2, y = temperature, colour = decade)) +
   #stat_summary(fun.data ="mean_sdl", geom = "smooth") + 
   geom_point(alpha = 0.05) +  
   geom_smooth() +
   #geom_rect(xmin = -Inf, xmax = ymd("2016-04-23"), ymin = 0, ymax = 8, colour = muted("blue"), fill = NA, inherit.aes = FALSE) +
-  geom_rect(data = box, aes( xmax = xmax, ymin = ymin, ymax = ymax), xmin = -Inf, colour = muted("blue"), fill = NA, inherit.aes = FALSE) +
+  geom_rect(data = box, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), colour = muted("blue"), fill = NA, inherit.aes = FALSE) +
   facet_wrap(~station, nrow = 3) + 
   scale_color_manual(values = c("steelblue2", "tomato")) +
   #scale_fill_manual(values = c("steelblue2", "tomato")) +
   scale_x_date(date_breaks = "3 month", date_labels = "%b") +
   labs(x = "", y = "Mean daily air temperature °C", colour = "Decade", fill = "Decade") +
-  theme_bw()
+  theme(text = element_text(size = 15), legend.position = "top")
+  #theme_bw(text = element_text(size = 15))
 climateplot
+
 
 ggsave(filename="ChillingPlot.pdf", plot = climateplot, width = 25, height = 20, units = "cm", dpi = 300)
 ggsave(filename="ChillingPlot.jpeg", plot = climateplot, width = 25, height = 20, units = "cm", dpi = 300)

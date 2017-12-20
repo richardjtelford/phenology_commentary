@@ -26,7 +26,9 @@ tromso <- read_excel("data/vgdcnNO000001026.xlsx")
 utsjoki <- read_excel("data/vgdcnFIE00146698.xlsx")
 
 
-climate <- bind_rows(feldberg = feldberg, lugano = lugano, nesbyen = nesbyen, bergen = bergen, utsjoki = utsjoki, tromso = tromso, .id = "station") %>%
+climate <- bind_rows(feldberg = feldberg, lugano = lugano,
+                     nesbyen = nesbyen, bergen = bergen, utsjoki = utsjoki, tromso = tromso, 
+                     .id = "station") %>%
   rename(year = V1, month = V2, day = V3, temperature = V4) %>% 
   mutate(year2 = if_else(month > 10, 2015, 2016),
          date2 = ymd(paste(year2, month, day)), 
@@ -51,8 +53,8 @@ climate2 <- climate %>%
 box <- data_frame(station = c("lugano", "feldberg", "bergen", "nesbyen", "tromso", "utsjoki"),
   xmin = rep(-Inf, 6),
 xmax = c(ymd("2016-04-23"), ymd("2016-05-11"), ymd("2016-05-15"), ymd("2016-05-15"), ymd("2016-06-21"), ymd("2016-06-21")),
-ymin = rep(0, 6),
-ymax = rep(8, 6))
+ymin = 0,
+ymax = 8)
 
 climate2 %>%
   mutate(station = factor(station, levels = c("lugano", "feldberg", "bergen", "nesbyen", "tromso", "utsjoki"))) %>% 
@@ -63,7 +65,7 @@ climate2 %>%
   geom_point(alpha = 0.05) +  
   geom_smooth() +
   #geom_rect(xmin = -Inf, xmax = ymd("2016-04-23"), ymin = 0, ymax = 8, colour = muted("blue"), fill = NA, inherit.aes = FALSE) +
-  geom_rect(box, aes(x = NULL, y = NULL, xmin = -Inf, xmax = xmax, ymin = 0, ymax = 8), colour = muted("blue"), fill = NA, inherit.aes = FALSE) +
+  geom_rect(data = box, aes( xmax = xmax, ymin = ymin, ymax = ymax), xmin = -Inf, colour = muted("blue"), fill = NA, inherit.aes = FALSE) +
   facet_wrap(~station, nrow = 3) + 
   scale_color_manual(values = c("steelblue2", "tomato")) +
   #scale_fill_manual(values = c("steelblue2", "tomato")) +
